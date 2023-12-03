@@ -29,27 +29,20 @@ inline std::pair<bool, int> is_num_string(
 		{ "nine" , 9 },
 	};
 
-	if (end - start < 3) {
-		return { false, 0 };
-	}
-
 	std::string str;
+	std::unordered_map<std::string, int>::const_iterator iter;
 	str.push_back(*(start + 0));
 	str.push_back(*(start + 1));
-	str.push_back(*(start + 2));
-	if (num_map.find(str) != num_map.end()) {
-		return { true, num_map.at(str) };
-	}
-
-	for (int i = 0; i < 2; ++i)
+	for (int i = 0; i < 3; ++i)
 	{
-		if (end - start < 4 + i) {
+		if (end - start < 3 + i) {
 			return { false, 0 };
 		}
 		
-		str.push_back(*(start + 3 + i));
-		if (num_map.find(str) != num_map.end()) {
-			return { true, num_map.at(str) };
+		str.push_back(*(start + 2 + i));
+		iter = num_map.find(str);
+		if (iter != num_map.cend()) {
+			return { true, (*iter).second };
 		}
 	}
 	
