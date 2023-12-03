@@ -1,3 +1,4 @@
+#include <chrono>
 #include <fstream>
 #include <iostream>
 #include <unordered_map>
@@ -48,6 +49,9 @@ inline std::pair<bool, int> is_num_string(
 	
 	return { false, 0 };
 }
+
+using sc = std::chrono::steady_clock;
+
 int main(int argc, char **argv)
 {
 	if (argc != 2) {
@@ -56,6 +60,8 @@ int main(int argc, char **argv)
 	}
 
 	int running_total = 0;
+
+	sc::time_point start = sc::now();
 
 	std::string line;
 	std::ifstream stream(argv[1]);
@@ -91,7 +97,9 @@ int main(int argc, char **argv)
 		}
 	}
 
+	auto elapsed = sc::now() - start;
 	std::cout << "total = " << running_total << std::endl;
+	std::cout << "elapsed time = " << std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count() << "us" << std::endl;
 
 	return 0;
 }
