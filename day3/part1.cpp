@@ -58,18 +58,15 @@ int main(int argc, char **argv)
 		row += 1;
 	}
 
-	// clear stream flags and go back to start
-	stream.clear();
-	stream.seekg(0, std::ios::beg);
-
 	row = 0;
 	bool valid_index = false;
 	bool reading_digit = false;
 	int local_number;
 
+	stream.clear();
+	stream.seekg(0, std::ios::beg);
 	while (std::getline(stream, line))
 	{
-		std::cout << "line: " << line << std::endl;
 		local_number = 0;
 		for (int col = 0; col < line.length(); ++col)
 		{
@@ -78,11 +75,7 @@ int main(int argc, char **argv)
 				if (reading_digit)
 				{
 					if (valid_index) {
-						std::cout << "  adding value: " << local_number << std::endl;
 						running_total += local_number;
-					}
-					else {
-						std::cout << "  NOT adding value: " << local_number << std::endl;
 					}
 					local_number = 0;
 					reading_digit = false;
@@ -100,6 +93,12 @@ int main(int argc, char **argv)
 					valid_index = true;
 				}
 			}
+		}
+		// check for number that terminates at the end of the line
+		if (reading_digit && valid_index) {
+			running_total += local_number;
+			reading_digit = false;
+			valid_index = false;
 		}
 		row += 1;
 	}
